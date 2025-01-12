@@ -49,7 +49,7 @@
               <span v-if="errors.season" class="error">{{ errors.season }}</span>
             </div>
 
-            <button class="button-56" role="button" :disabled="!isFormValid" @click="onSaveItem">
+            <button class="button-56" role="button" type="button" @click="onSaveItem">
               Save Item
             </button>
 
@@ -68,7 +68,8 @@
 
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { API_URLS } from '@/constants/constants';
+import { reactive, watch, ref, type Ref } from 'vue';
 
 
 
@@ -90,26 +91,31 @@ const errors = reactive({
   season: ''
 })
 
+const file: Ref = ref(null);
 
 const onSaveItem = () => {
+
+  const formData = new FormData();
+
+  formData.append('file', file.value);
+  formData.append('item', JSON.stringify(form));
+
+  const itemServiceUrl = API_URLS.CREATE_ITEM_URL;
+
+  fetch(itemServiceUrl, {
+    method: 'POST',
+    body: formData
+  }).catch(error => console.error(error));
+
+
 
 }
 
 
-const handelFileUpload = (e) => {
-  const files = e.target.files;
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      console.log(files[i]);
-    }
-  }
+const handelFileUpload = (e: Event) => {
+  file.value = (e.target as HTMLInputElement).files?.[0];
 };
 
-const isFormValid = computed(() => {
-  return !errors.name && !errors.brand && !errors.category && !errors.color
-    && !errors.style && !errors.season;
-
-})
 
 watch(
   () => form.name,
@@ -193,9 +199,6 @@ const validateField = (field: string, value: string) => {
       break;
   }
 }
-
-
-
 
 </script>
 
