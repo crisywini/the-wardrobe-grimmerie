@@ -20,36 +20,36 @@
           <div class="input-form">
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Name" />
-              <span></span>
+              <input v-model="form.name" type="text" placeholder="Name" />
+              <span v-if="errors.name" class="error">{{ errors.name }}</span>
             </div>
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Category" />
-              <span></span>
+              <input v-model="form.category" type="text" placeholder="Category" />
+              <span v-if="errors.category" class="error">{{ errors.category }}</span>
             </div>
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Brand" />
-              <span></span>
+              <input v-model="form.brand" type="text" placeholder="Brand" />
+              <span v-if="errors.brand" class="error">{{ errors.brand }}</span>
             </div>
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Color" />
-              <span></span>
+              <input v-model="form.color" type="text" placeholder="Color" />
+              <span v-if="errors.color" class="error">{{ errors.color }}</span>
             </div>
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Style" />
-              <span></span>
+              <input v-model="form.style" type="text" placeholder="Style" />
+              <span v-if="errors.style" class="error">{{ errors.style }}</span>
             </div>
 
             <div class="input-group">
-              <input id="" type="text" placeholder="Season" />
-              <span></span>
+              <input v-model="form.season" type="text" placeholder="Season" />
+              <span v-if="errors.season" class="error">{{ errors.season }}</span>
             </div>
 
-            <button class="button-56" role="button">
+            <button class="button-56" role="button" :disabled="!isFormValid" @click="onSaveItem">
               Save Item
             </button>
 
@@ -68,6 +68,33 @@
 
 
 <script setup lang="ts">
+import { computed, reactive, watch } from 'vue';
+
+
+
+const form = reactive({
+  name: '',
+  category: '',
+  brand: '',
+  color: '',
+  style: '',
+  season: ''
+})
+
+const errors = reactive({
+  name: '',
+  category: '',
+  brand: '',
+  color: '',
+  style: '',
+  season: ''
+})
+
+
+const onSaveItem = () => {
+
+}
+
 
 const handelFileUpload = (e) => {
   const files = e.target.files;
@@ -77,6 +104,97 @@ const handelFileUpload = (e) => {
     }
   }
 };
+
+const isFormValid = computed(() => {
+  return !errors.name && !errors.brand && !errors.category && !errors.color
+    && !errors.style && !errors.season;
+
+})
+
+watch(
+  () => form.name,
+  (newValue) => validateField('name', newValue)
+)
+
+watch(
+  () => form.brand,
+  (newValue) => validateField('brand', newValue)
+)
+
+watch(
+  () => form.category,
+  (newValue) => validateField('category', newValue)
+)
+
+watch(
+  () => form.color,
+  (newValue) => validateField('color', newValue)
+)
+
+watch(
+  () => form.style,
+  (newValue) => validateField('style', newValue)
+)
+
+watch(
+  () => form.season,
+  (newValue) => validateField('season', newValue)
+)
+
+
+const validateField = (field: string, value: string) => {
+  switch (field) {
+
+
+    case 'name':
+      if (!value) {
+        errors.name = 'The Name of the item is required';
+      } else {
+        errors.name = '';
+      }
+      break;
+    case 'brand':
+      if (!value) {
+        errors.brand = 'The Brand of the item is required';
+      } else {
+        errors.brand = '';
+      }
+      break;
+    case 'category':
+      if (!value) {
+        errors.category = 'The Category of the item is required';
+      } else {
+        errors.category = '';
+      }
+      break;
+
+    case 'color':
+      if (!value) {
+        errors.color = 'The Color of the item is required';
+      } else {
+        errors.color = '';
+      }
+      break;
+
+    case 'style':
+      if (!value) {
+        errors.style = 'The Style of the item is required';
+      } else {
+        errors.style = '';
+      }
+      break;
+
+    case 'season':
+      if (!value) {
+        errors.season = 'The Season of the item is required';
+      } else {
+        errors.season = '';
+      }
+      break;
+  }
+}
+
+
 
 
 </script>
