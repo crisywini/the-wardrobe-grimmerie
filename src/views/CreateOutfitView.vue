@@ -12,11 +12,12 @@
 <script setup lang="ts">
 import ItemSelector from '@/components/ItemSelector.vue';
 import { API_URLS } from '@/constants/constants';
+import type Item from '@/interfaces/item';
 import { onMounted, ref, computed } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
 
-const items = ref([]);
+const items = ref<Item[]>([]);
 
 const getAllItems = async () => {
   try {
@@ -67,7 +68,7 @@ const shoesUrls = computed(() => {
 })
 
 
-const mapToImageUrls = (item) => {
+const mapToImageUrls = (item: Item) => {
   return item.image_url;
 }
 
