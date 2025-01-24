@@ -3,7 +3,7 @@
     <button class="button-56" @click="previousImage">Anterior</button>
 
     <div class="image-container" :style="containerStyle">
-      <img :src="images[currentIndex]" alt="Image" />
+      <img v-if="items[currentIndex]" :src="items[currentIndex].image_url" alt="Image" />
     </div>
 
     <button class="button-56" @click="nextImage">Siguiente</button>
@@ -11,17 +11,22 @@
 </template>
 
 <script setup lang="ts">
+import type Item from '@/interfaces/item';
 import { ref } from 'vue';
 import { watch } from 'vue';
 
 const props = defineProps({
-  images: { type: Array as () => string[], required: true },
+  items: { type: Array as () => Item[], required: true },
   containerStyle: { type: Object, required: false }
 
 });
 
-watch(() => props.images, (newImages) => {
-  console.log('Updated images:', newImages);
+const emits = defineEmits<{
+  sendItem: [item: Item]
+}>();
+
+watch(() => props.items, (newItem) => {
+  console.log('Updated items:', newItem);
 });
 
 const currentIndex = ref(0);
@@ -30,16 +35,20 @@ const previousImage = () => {
   if (currentIndex.value > 0) {
     currentIndex.value--;
   } else {
-    currentIndex.value = props.images.length - 1;
+    currentIndex.value = props.items.length - 1;
   }
+  emits('sendItem', props.items[currentIndex.value])
+
 };
 
 const nextImage = () => {
-  if (currentIndex.value < props.images.length - 1) {
+  if (currentIndex.value < props.items.length - 1) {
     currentIndex.value++;
   } else {
     currentIndex.value = 0;
   }
+  emits('sendItem', props.items[currentIndex.value])
+
 };
 </script>
 

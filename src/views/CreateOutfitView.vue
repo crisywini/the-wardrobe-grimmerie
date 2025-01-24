@@ -1,9 +1,16 @@
 <template>
   <div class="selector-container">
-    <ItemSelector :images="shirtsUrls" :containerStyle="getContainerStyle('shirts')" />
-    <ItemSelector :images="pantsUrls" :containerStyle="getContainerStyle('pants')" />
+    <div>
+      <ItemSelector :items="tshirts" :containerStyle="getContainerStyle('shirts')" @sendItem="onSetItem" />
+      <ItemSelector :items="pants" :containerStyle="getContainerStyle('pants')" @sendItem="onSetItem" />
+      <ItemSelector :items="shoes" :containerStyle="getContainerStyle('shoes')" @sendItem="onSetItem" />
 
-    <ItemSelector :images="shoesUrls" :containerStyle="getContainerStyle('shoes')" />
+    </div>
+    <div class="button-container">
+
+      <button @click="onSaveOutfit" class="button-56">Save</button>
+
+    </div>
   </div>
 
 </template>
@@ -16,8 +23,12 @@ import type Item from '@/interfaces/item';
 import { onMounted, ref, computed } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
+const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 
 const items = ref<Item[]>([]);
+const shirtSelected = ref<Item>();
+const pantsSelected = ref<Item>();
+const shoesSelected = ref<Item>();
 
 const getAllItems = async () => {
   try {
@@ -32,6 +43,7 @@ const getAllItems = async () => {
 
     const data = await response.json();
     items.value = data;
+    console.log(items);
   } catch (error) {
     console.error(error);
   }
@@ -50,27 +62,48 @@ const shoes = computed(() => {
   return items.value.filter(item => item.category === 'shoes');
 });
 
+const onSetItem = (item: Item) => {
 
-const pantsUrls = computed(() => {
-  return pants.value.map(mapToImageUrls);
+  switch (item.category) {
 
-})
-
-const shirtsUrls = computed(() => {
-  return tshirts.value.map(mapToImageUrls);
-
-})
-
-
-const shoesUrls = computed(() => {
-  return shoes.value.map(mapToImageUrls);
-
-})
-
-
-const mapToImageUrls = (item: Item) => {
-  return item.image_url;
+    case 'pants':
+      pantsSelected.value = item;
+      break;
+    case 'shirts':
+      shirtSelected.value = item;
+      break;
+    case 'shoes':
+      shoesSelected.value = item;
+      break;
+  }
 }
+
+const onSaveOutfit = async () => {
+
+  try {
+    const body = {
+      name: "outfit",
+      items: [shirtSelected.value, pantsSelected.value, shoesSelected.value]
+    };
+    const response = await fetch(outfitsServiceUrl, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      console.log(response);
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
 
 const getContainerStyle = (category: string) => {
   switch (category) {
@@ -117,6 +150,7 @@ const getContainerStyle = (category: string) => {
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  align-items: center;
 
 
 }
