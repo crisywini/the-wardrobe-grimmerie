@@ -1,9 +1,9 @@
 <template>
   <div class="selector-container">
     <div>
-      <ItemSelector :items="tshirts" :containerStyle="getContainerStyle('shirts')" @sendItem="onSetItem" />
-      <ItemSelector :items="pants" :containerStyle="getContainerStyle('pants')" @sendItem="onSetItem" />
-      <ItemSelector :items="shoes" :containerStyle="getContainerStyle('shoes')" @sendItem="onSetItem" />
+      <ItemSelector :items="tshirts || []" :containerStyle="getContainerStyle('shirts')" @sendItem="onSetItem" />
+      <ItemSelector :items="pants || []" :containerStyle="getContainerStyle('pants')" @sendItem="onSetItem" />
+      <ItemSelector :items="shoes || []" :containerStyle="getContainerStyle('shoes')" @sendItem="onSetItem" />
 
     </div>
     <div class="button-container">
@@ -20,20 +20,36 @@
 import ItemSelector from '@/components/ItemSelector.vue';
 import { API_URLS } from '@/constants/constants';
 import type Item from '@/interfaces/item';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
 const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 
-const items = ref<Item[]>([]);
 const shirtSelected = ref<Item>();
 const pantsSelected = ref<Item>();
 const shoesSelected = ref<Item>();
 
-const getAllItems = async () => {
+const tshirts = ref<Item[]>();
+const pants = ref<Item[]>();
+const shoes = ref<Item[]>();
+
+const fetchAllItems = async () => {
+  try {
+    pants.value = await getItemsByCategory("pants");
+    tshirts.value = await getItemsByCategory("shirts");
+    shoes.value = await getItemsByCategory("shoes");
+  } catch (error) {
+    console.error("Error al obtener los ítems:", error);
+  }
+};
+
+
+onMounted(fetchAllItems);
+
+const getItemsByCategory = async (category: string): Promise<Item[]> => {
   try {
 
-    const response = await fetch(itemServiceUrl, {
+    const response = await fetch(itemServiceUrl + "?category=" + category, {
       method: 'GET'
     });
 
@@ -42,25 +58,11 @@ const getAllItems = async () => {
     }
 
     const data = await response.json();
-    items.value = data;
-    console.log(items);
+    return data;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 }
-onMounted(getAllItems);
-
-const pants = computed(() => {
-  return items.value.filter(item => item.category === 'pants');
-});
-
-const tshirts = computed(() => {
-  return items.value.filter(item => item.category === 'shirts');
-});
-
-const shoes = computed(() => {
-  return items.value.filter(item => item.category === 'shoes');
-});
 
 const onSetItem = (item: Item) => {
 
