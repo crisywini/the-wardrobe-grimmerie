@@ -1,15 +1,19 @@
 <template>
-  <div class="selector-container">
-    <div>
+
+
+  <AddOutfitInfoPopUp :items="itemsSelected" v-show="popUp" @showPopUp="showPopUpHandler" />
+
+  <div v-show="!popUp" class="outfit-container">
+
+
+    <div class="selector-container">
       <ItemSelector :items="tshirts || []" :containerStyle="getContainerStyle('shirts')" @sendItem="onSetItem" />
       <ItemSelector :items="pants || []" :containerStyle="getContainerStyle('pants')" @sendItem="onSetItem" />
       <ItemSelector :items="shoes || []" :containerStyle="getContainerStyle('shoes')" @sendItem="onSetItem" />
-
     </div>
+
     <div class="button-container">
-
       <button @click="onSaveOutfit" class="button-56">Save</button>
-
     </div>
   </div>
 
@@ -17,17 +21,21 @@
 
 
 <script setup lang="ts">
+import AddOutfitInfoPopUp from '@/components/AddOutfitInfoPopUp.vue';
 import ItemSelector from '@/components/ItemSelector.vue';
 import { API_URLS } from '@/constants/constants';
 import type Item from '@/interfaces/item';
 import { onMounted, ref } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
-const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+
+const popUp = ref(false);
 
 const shirtSelected = ref<Item>();
 const pantsSelected = ref<Item>();
 const shoesSelected = ref<Item>();
+
+const itemsSelected = ref<Item[]>([]);
 
 const tshirts = ref<Item[]>();
 const pants = ref<Item[]>();
@@ -38,11 +46,17 @@ const fetchAllItems = async () => {
     pants.value = await getItemsByCategory("pants");
     tshirts.value = await getItemsByCategory("shirts");
     shoes.value = await getItemsByCategory("shoes");
+    shirtSelected.value = tshirts.value[0];
+    pantsSelected.value = pants.value[0];
+    shoesSelected.value = shoes.value[0];
   } catch (error) {
-    console.error("Error al obtener los ítems:", error);
+    console.error("Error getting items:", error);
   }
 };
 
+const showPopUpHandler = (showPopUp: boolean) => {
+  popUp.value = showPopUp;
+}
 
 onMounted(fetchAllItems);
 
@@ -81,29 +95,11 @@ const onSetItem = (item: Item) => {
 }
 
 const onSaveOutfit = async () => {
-
-  try {
-    const body = {
-      name: "outfit",
-      items: [shirtSelected.value, pantsSelected.value, shoesSelected.value]
-    };
-    const response = await fetch(outfitsServiceUrl, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify(body)
-    });
-    if (!response.ok) {
-      console.log(response);
-    }
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
-
+  popUp.value = true;
+  itemsSelected.value = [shirtSelected.value, pantsSelected.value, shoesSelected.value].filter(
+    (item): item is Item => item !== undefined
+  );
+  console.log("Items selected: " + itemsSelected.value);
 }
 
 
@@ -140,20 +136,29 @@ const getContainerStyle = (category: string) => {
   }
 }
 
-
-
 </script>
 
 
 
 <style lang="css" scoped>
-.selector-container {
+.outfit-container {
 
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   align-items: center;
+  gap: 0x;
+}
 
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
 
 }
 </style>

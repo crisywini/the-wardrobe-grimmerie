@@ -1,12 +1,12 @@
 <template>
   <div class="file-container">
-    <button class="button-56" @click="previousImage">Anterior</button>
+    <button class="button-56" @click="previousImage">&#60;</button>
 
     <div class="image-container" :style="containerStyle">
       <img v-if="items[currentIndex]" :src="items[currentIndex].image_url" alt="Image" />
     </div>
 
-    <button class="button-56" @click="nextImage">Siguiente</button>
+    <button class="button-56" @click="nextImage">&#62;</button>
   </div>
 </template>
 
@@ -37,6 +37,7 @@ const previousImage = () => {
   } else {
     currentIndex.value = props.items.length - 1;
   }
+  console.log("Sending item" + props.items[currentIndex.value]);
   emits('sendItem', props.items[currentIndex.value])
 
 };
@@ -47,6 +48,7 @@ const nextImage = () => {
   } else {
     currentIndex.value = 0;
   }
+  console.log("Sending item" + props.items[currentIndex.value]);
   emits('sendItem', props.items[currentIndex.value])
 
 };
@@ -57,9 +59,9 @@ const nextImage = () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   text-align: center;
-  gap: 10px;
-  padding: 40px 20px;
-  width: 900px;
+  gap: 0px;
+  padding: 30px 10px;
+  width: 700px;
   place-items: center;
 }
 
