@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { API_URLS } from '@/constants/constants';
 import type Item from '@/interfaces/item';
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 const form = reactive({
   name: '',
@@ -50,13 +50,11 @@ const emits = defineEmits<{
 
 const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 
-console.log(props.items);
-
 const onSaveOutfit = async () => {
   try {
     const body = {
       name: form.name,
-      value: form.category,
+      category: form.category,
       items: props.items
     };
     const response = await fetch(outfitsServiceUrl, {
@@ -71,11 +69,42 @@ const onSaveOutfit = async () => {
       console.log(response);
     }
     const data = await response.json();
-    console.log(data);
+    console.log("Saved with data: " + data);
     emits('showPopUp', false);
   } catch (error) {
     console.log(error);
   }
+}
+
+watch(
+  () => form.name,
+  (newValue) => validateField('name', newValue)
+);
+
+watch(
+  () => form.category,
+  (newValue) => validateField('category', newValue)
+);
+
+const validateField = (field: string, value: string) => {
+
+  switch (field) {
+    case 'category':
+      if (!value) {
+        errors.category = 'The Category is required';
+      } else {
+        errors.name = '';
+      }
+      break;
+    case 'name':
+      if (!value) {
+        errors.name = 'The Name is required';
+      } else {
+        errors.name = '';
+      }
+      break;
+  }
+
 }
 
 

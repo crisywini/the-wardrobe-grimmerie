@@ -46,6 +46,9 @@ const fetchAllItems = async () => {
     pants.value = await getItemsByCategory("pants");
     tshirts.value = await getItemsByCategory("shirts");
     shoes.value = await getItemsByCategory("shoes");
+    shirtSelected.value = tshirts.value[0];
+    pantsSelected.value = pants.value[0];
+    shoesSelected.value = shoes.value[0];
   } catch (error) {
     console.error("Error getting items:", error);
   }
@@ -93,10 +96,10 @@ const onSetItem = (item: Item) => {
 
 const onSaveOutfit = async () => {
   popUp.value = true;
-  itemsSelected.value = [shirtSelected.value, pants.value, shoes.value].filter(
+  itemsSelected.value = [shirtSelected.value, pantsSelected.value, shoesSelected.value].filter(
     (item): item is Item => item !== undefined
   );
-  console.log(itemsSelected.value);
+  console.log("Items selected: " + itemsSelected.value);
 }
 
 

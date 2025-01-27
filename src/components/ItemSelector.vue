@@ -37,6 +37,7 @@ const previousImage = () => {
   } else {
     currentIndex.value = props.items.length - 1;
   }
+  console.log("Sending item" + props.items[currentIndex.value]);
   emits('sendItem', props.items[currentIndex.value])
 
 };
@@ -47,6 +48,7 @@ const nextImage = () => {
   } else {
     currentIndex.value = 0;
   }
+  console.log("Sending item" + props.items[currentIndex.value]);
   emits('sendItem', props.items[currentIndex.value])
 
 };
