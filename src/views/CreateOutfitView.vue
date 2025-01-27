@@ -1,15 +1,19 @@
 <template>
-  <div class="selector-container">
-    <div>
+
+
+  <AddOutfitInfoPopUp v-show="popUp" />
+
+  <div v-show="!popUp" class="outfit-container">
+
+
+    <div class="selector-container">
       <ItemSelector :items="tshirts || []" :containerStyle="getContainerStyle('shirts')" @sendItem="onSetItem" />
       <ItemSelector :items="pants || []" :containerStyle="getContainerStyle('pants')" @sendItem="onSetItem" />
       <ItemSelector :items="shoes || []" :containerStyle="getContainerStyle('shoes')" @sendItem="onSetItem" />
-
     </div>
+
     <div class="button-container">
-
       <button @click="onSaveOutfit" class="button-56">Save</button>
-
     </div>
   </div>
 
@@ -17,6 +21,7 @@
 
 
 <script setup lang="ts">
+import AddOutfitInfoPopUp from '@/components/AddOutfitInfoPopUp.vue';
 import ItemSelector from '@/components/ItemSelector.vue';
 import { API_URLS } from '@/constants/constants';
 import type Item from '@/interfaces/item';
@@ -24,6 +29,8 @@ import { onMounted, ref } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
 const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+
+const popUp = ref(false);
 
 const shirtSelected = ref<Item>();
 const pantsSelected = ref<Item>();
@@ -81,6 +88,8 @@ const onSetItem = (item: Item) => {
 }
 
 const onSaveOutfit = async () => {
+
+  popUp.value = true;
 
   try {
     const body = {
@@ -140,20 +149,29 @@ const getContainerStyle = (category: string) => {
   }
 }
 
-
-
 </script>
 
 
 
 <style lang="css" scoped>
-.selector-container {
+.outfit-container {
 
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   align-items: center;
+  gap: 0x;
+}
 
+.selector-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
 
 }
 </style>
