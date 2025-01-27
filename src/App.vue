@@ -3,17 +3,16 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <RouterView />
   </div>
 </template>
 
 <style scoped>
-.app-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+.container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 </style>
