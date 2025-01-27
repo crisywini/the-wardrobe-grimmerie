@@ -1,7 +1,7 @@
 <template>
 
 
-  <AddOutfitInfoPopUp v-show="popUp" />
+  <AddOutfitInfoPopUp :items="itemsSelected" v-show="popUp" @showPopUp="showPopUpHandler" />
 
   <div v-show="!popUp" class="outfit-container">
 
@@ -28,13 +28,14 @@ import type Item from '@/interfaces/item';
 import { onMounted, ref } from 'vue';
 
 const itemServiceUrl = API_URLS.ITEM_SERVICE_URL;
-const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 
 const popUp = ref(false);
 
 const shirtSelected = ref<Item>();
 const pantsSelected = ref<Item>();
 const shoesSelected = ref<Item>();
+
+const itemsSelected = ref<Item[]>([]);
 
 const tshirts = ref<Item[]>();
 const pants = ref<Item[]>();
@@ -46,10 +47,13 @@ const fetchAllItems = async () => {
     tshirts.value = await getItemsByCategory("shirts");
     shoes.value = await getItemsByCategory("shoes");
   } catch (error) {
-    console.error("Error al obtener los ítems:", error);
+    console.error("Error getting items:", error);
   }
 };
 
+const showPopUpHandler = (showPopUp: boolean) => {
+  popUp.value = showPopUp;
+}
 
 onMounted(fetchAllItems);
 
@@ -88,31 +92,11 @@ const onSetItem = (item: Item) => {
 }
 
 const onSaveOutfit = async () => {
-
   popUp.value = true;
-
-  try {
-    const body = {
-      name: "outfit",
-      items: [shirtSelected.value, pantsSelected.value, shoesSelected.value]
-    };
-    const response = await fetch(outfitsServiceUrl, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify(body)
-    });
-    if (!response.ok) {
-      console.log(response);
-    }
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
-
+  itemsSelected.value = [shirtSelected.value, pants.value, shoes.value].filter(
+    (item): item is Item => item !== undefined
+  );
+  console.log(itemsSelected.value);
 }
 
 

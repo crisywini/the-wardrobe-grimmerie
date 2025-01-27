@@ -7,23 +7,80 @@
       <h1>Save Outfit</h1>
       <div class="input-form">
         <div class="input-group">
-          <input type="text" placeholder="Name" />
-          <span class="error"></span>
+          <input v-model="form.name" type="text" placeholder="Name" />
+          <span v-if="errors.name" class="error">{{ errors.name }}</span>
         </div>
         <div class="input-group">
-          <input type="text" placeholder="Category" />
-          <span class="error"></span>
+          <input v-model="form.category" type="text" placeholder="Category" />
+          <span v-if="errors.category" class="error">{{ errors.category }}</span>
         </div>
       </div>
 
 
-      <button class="button-56">Submit </button>
+      <button @click="onSaveOutfit" class="button-56">Submit </button>
     </div>
 
 
   </div>
 
 </template>
+
+<script setup lang="ts">
+import { API_URLS } from '@/constants/constants';
+import type Item from '@/interfaces/item';
+import { reactive } from 'vue';
+
+const form = reactive({
+  name: '',
+  category: ''
+});
+
+const errors = reactive({
+  name: '',
+  category: ''
+});
+
+const props = defineProps({
+  items: { type: Array as () => Item[], required: true }
+});
+
+const emits = defineEmits<{
+  showPopUp: [popUp: boolean]
+}>();
+
+const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+
+console.log(props.items);
+
+const onSaveOutfit = async () => {
+  try {
+    const body = {
+      name: form.name,
+      value: form.category,
+      items: props.items
+    };
+    const response = await fetch(outfitsServiceUrl, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      console.log(response);
+    }
+    const data = await response.json();
+    console.log(data);
+    emits('showPopUp', false);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+</script>
 
 <style>
 .pop-up {
