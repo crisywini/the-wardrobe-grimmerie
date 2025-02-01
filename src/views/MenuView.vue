@@ -7,25 +7,22 @@
   </nav>
 </template>
 
-<script lang="ts">
-import type { RouteLocationAsRelativeGeneric, RouteLocationAsPathGeneric } from 'vue-router';
+<script setup lang="ts">
+import { type RouteLocationAsRelativeGeneric, type RouteLocationAsPathGeneric, useRouter } from 'vue-router';
 
-export default {
-  data() {
-    return {
-      features: [
-        { id: 1, name: 'Create Outfit', link: '/outfits' },
-        { id: 2, name: 'See All Outfits', link: '/outfits/all' },
-        { id: 3, name: 'Add Items', link: '/items' },
-      ],
-    };
-  },
-  methods: {
-    navigateTo(link: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric) {
-      this.$router.push(link);
-    },
-  },
+const router = useRouter();
+
+const features = [
+  { id: 1, name: 'Create Outfit', link: '/outfits' },
+  { id: 2, name: 'See All Outfits', link: '/outfits/all' },
+  { id: 3, name: 'Add Items', link: '/items' },
+];
+
+const navigateTo = (link: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric) => {
+  router.push(link);
 };
+
+
 </script>
 
 <style scoped>
@@ -37,6 +34,8 @@ export default {
   margin: 0;
   gap: 60px;
   min-height: 100vh;
+  font-family: "Bebas Neue", serif;
+  font-style: normal;
 }
 
 .menu li {

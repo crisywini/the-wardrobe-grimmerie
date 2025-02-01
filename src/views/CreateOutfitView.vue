@@ -148,6 +148,8 @@ const getContainerStyle = (category: string) => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   align-items: center;
   gap: 0x;
+  min-height: 100vh;
+
 }
 
 .selector-container {
