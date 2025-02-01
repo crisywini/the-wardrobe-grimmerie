@@ -1,7 +1,7 @@
 <template>
   <div class="pop-up">
     <div class="pop-up-inner">
-      <div class="pop-up-close">
+      <div class="pop-up-close" @click="close">
         &times;
       </div>
       <h1>Save Outfit</h1>
@@ -105,6 +105,10 @@ const validateField = (field: string, value: string) => {
       break;
   }
 
+}
+
+const close = () => {
+  emits('showPopUp', false);
 }
 
 
