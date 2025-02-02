@@ -4,7 +4,9 @@
     <div class="box" />
 
     <div class="category-container">
-      <h1 v-for="category in categories" :key="category" class="category" @click="selectCategory(category)"> {{ category
+      <h1 v-for="category in outfitCategoriesRef" :key="category" class="category" @click="selectCategory(category)">
+        {{
+          category
         }}</h1>
     </div>
 
@@ -16,19 +18,91 @@
 </template>
 
 <script setup lang="ts">
+import { API_URLS } from '@/constants/constants';
+import type Outfit from '@/interfaces/outfit';
+import { onMounted, ref } from 'vue';
+
 
 const images = ["/public/images/o1.png", "/public/images/o2.png", "/public/images/o3.png", "/public/images/o4.png"]
 
-const categories = ["gym wear", "casual", "streetwear"]
+
+const outfitCategoriesServiceUrl = API_URLS.OUTFITS_CATEGORIES_SERVICE_URL;
+const ouftitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+
+const outfitCategoriesRef = ref([]);
+const outfitsRef = ref<Outfit[]>();
+
+const fetchAllItems = async () => {
+  try {
+    outfitCategoriesRef.value = await getOutfitCategories();
+    outfitsRef.value = await getAllOutfits();
+  } catch (error) {
+    console.log('Error getting categories: ', error);
+  }
+};
+
+const getOutfitCategories = async () => {
+  try {
+    const response = await fetch(outfitCategoriesServiceUrl, {
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      console.log(response);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAllOutfits = async () => {
+  try {
+    const response = await fetch(ouftitsServiceUrl, {
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      console.log(response);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getOutfitsByCategory = async (category: string) => {
+  try {
+    const response = await fetch(ouftitsServiceUrl + "?category=" + category, {
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      console.log(response);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 const selectOutfit = (path: string) => {
   console.log(path);
-}
+};
 
-const selectCategory = (category: string) => {
+const selectCategory = async (category: string) => {
   console.log('Category Selected', category)
-}
+  outfitsRef.value = await getOutfitsByCategory(category);
+  console.log(outfitsRef.value);
+};
 
+onMounted(fetchAllItems);
 
 </script>
 
