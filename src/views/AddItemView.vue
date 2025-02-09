@@ -1,68 +1,64 @@
 <template>
-  <div>
+  <div class="items-container">
+    <form>
+      <div class="file-container">
+        <div class="input-image-form">
+          <input type="file" id="media" accept="image/*" @change="(event) => handelFileUpload(event)" />
+          <div>
+            <section>
+              <img src="../assets/upload.svg" />
 
-    <div>
-      <form>
+              <p>Upload image here.</p>
+            </section>
+          </div>
+        </div>
 
-        <div class="file-container">
-          <div class="input-image-form">
-            <input type="file" id="media" accept="image/*" @change="(event) => handelFileUpload(event)" />
-            <div>
-              <section>
-                <img src="../assets/upload.svg" />
 
-                <p>Upload image here.</p>
-              </section>
-            </div>
+        <div class="input-form">
+
+          <div class="input-group">
+            <input v-model="form.name" type="text" placeholder="Name" />
+            <span v-if="errors.name" class="error">{{ errors.name }}</span>
           </div>
 
-
-          <div class="input-form">
-
-            <div class="input-group">
-              <input v-model="form.name" type="text" placeholder="Name" />
-              <span v-if="errors.name" class="error">{{ errors.name }}</span>
-            </div>
-
-            <div class="input-group">
-              <input v-model="form.category" type="text" placeholder="Category" />
-              <span v-if="errors.category" class="error">{{ errors.category }}</span>
-            </div>
-
-            <div class="input-group">
-              <input v-model="form.brand" type="text" placeholder="Brand" />
-              <span v-if="errors.brand" class="error">{{ errors.brand }}</span>
-            </div>
-
-            <div class="input-group">
-              <input v-model="form.color" type="text" placeholder="Color" />
-              <span v-if="errors.color" class="error">{{ errors.color }}</span>
-            </div>
-
-            <div class="input-group">
-              <input v-model="form.style" type="text" placeholder="Style" />
-              <span v-if="errors.style" class="error">{{ errors.style }}</span>
-            </div>
-
-            <div class="input-group">
-              <input v-model="form.season" type="text" placeholder="Season" />
-              <span v-if="errors.season" class="error">{{ errors.season }}</span>
-            </div>
-
-            <button class="button-56" role="button" type="button" @click="onSaveItem">
-              Save Item
-            </button>
-
-
+          <div class="input-group">
+            <input v-model="form.category" type="text" placeholder="Category" />
+            <span v-if="errors.category" class="error">{{ errors.category }}</span>
           </div>
+
+          <div class="input-group">
+            <input v-model="form.brand" type="text" placeholder="Brand" />
+            <span v-if="errors.brand" class="error">{{ errors.brand }}</span>
+          </div>
+
+          <div class="input-group">
+            <input v-model="form.color" type="text" placeholder="Color" />
+            <span v-if="errors.color" class="error">{{ errors.color }}</span>
+          </div>
+
+          <div class="input-group">
+            <input v-model="form.style" type="text" placeholder="Style" />
+            <span v-if="errors.style" class="error">{{ errors.style }}</span>
+          </div>
+
+          <div class="input-group">
+            <input v-model="form.season" type="text" placeholder="Season" />
+            <span v-if="errors.season" class="error">{{ errors.season }}</span>
+          </div>
+
+          <button class="button-56" role="button" type="button" @click="onSaveItem">
+            Save Item
+          </button>
+
 
         </div>
 
-      </form>
-    </div>
+      </div>
 
-
+    </form>
   </div>
+
+
 
 </template>
 
@@ -201,6 +197,15 @@ const validateField = (field: string, value: string) => {
 
 
 <style scoped>
+.items-container {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+}
+
 .file-container {
 
   display: grid;
@@ -214,12 +219,8 @@ const validateField = (field: string, value: string) => {
 
 
 .input-form {
-
   display: flex;
   flex-direction: column;
-
-
-
 }
 
 .input-group {
@@ -229,6 +230,7 @@ const validateField = (field: string, value: string) => {
 
 input {
 
+  font-family: "Bebas Neue", serif;
   border: 3px solid #000;
   border-radius: 5px;
   height: 50px;
