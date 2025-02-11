@@ -3,7 +3,7 @@
     <button class="button-56" @click="previousImage">&#60;</button>
 
     <div class="image-container" :style="containerStyle">
-      <img v-if="items[currentIndex]" :src="items[currentIndex].image_url" alt="Image" />
+      <img v-if="items[currentIndex]" :src="imageBaseUrl + items[currentIndex].image_url" alt="Image" />
     </div>
 
     <button class="button-56" @click="nextImage">&#62;</button>
@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import { API_URLS } from '@/constants/constants';
 import type Item from '@/interfaces/item';
 import { ref } from 'vue';
 import { watch } from 'vue';
@@ -24,6 +25,8 @@ const props = defineProps({
 const emits = defineEmits<{
   sendItem: [item: Item]
 }>();
+
+const imageBaseUrl = API_URLS.BASE_API_URL;
 
 watch(() => props.items, (newItem) => {
   console.log('Updated items:', newItem);
