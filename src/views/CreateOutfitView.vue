@@ -148,7 +148,9 @@ const getContainerStyle = (category: string) => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   align-items: center;
   gap: 0x;
-  min-height: 100vh;
+  min-height: 60vh;
+  min-width: 100vh;
+
 
 }
 
@@ -156,11 +158,13 @@ const getContainerStyle = (category: string) => {
   display: flex;
   flex-direction: column;
   gap: 0px;
+
 }
 
 .button-container {
   display: flex;
   flex-direction: column;
+  padding: 10%;
 
 }
 </style>
