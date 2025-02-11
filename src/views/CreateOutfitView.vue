@@ -151,7 +151,6 @@ const getContainerStyle = (category: string) => {
   min-height: 60vh;
   min-width: 100vh;
 
-
 }
 
 .selector-container {

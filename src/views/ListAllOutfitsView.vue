@@ -11,7 +11,7 @@
     </div>
 
     <div class="outfits-container">
-      <img v-for="path in images" :key="path" :src="path" class="outfit" @click="selectOutfit(path)">
+      <img v-for="path in outfitImages" :key="path" :src="path" class="outfit" @click="selectOutfit(path)">
     </div>
 
   </div>
@@ -23,11 +23,13 @@ import type Outfit from '@/interfaces/outfit';
 import { onMounted, ref } from 'vue';
 
 
-const images = ["/public/images/o1.png", "/public/images/o2.png", "/public/images/o3.png", "/public/images/o4.png"]
+//const images = ["/public/images/o1.png", "/public/images/o2.png", "/public/images/o3.png", "/public/images/o4.png"]
 
+const outfitImages = ref();
 
 const outfitCategoriesServiceUrl = API_URLS.OUTFITS_CATEGORIES_SERVICE_URL;
 const ouftitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+const imageBaseUrl = API_URLS.BASE_API_URL;
 
 const outfitCategoriesRef = ref([]);
 const outfitsRef = ref<Outfit[]>();
@@ -36,6 +38,7 @@ const fetchAllItems = async () => {
   try {
     outfitCategoriesRef.value = await getOutfitCategories();
     outfitsRef.value = await getAllOutfits();
+    outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
   } catch (error) {
     console.log('Error getting categories: ', error);
   }
