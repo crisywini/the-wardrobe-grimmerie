@@ -53,8 +53,8 @@ const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 const onSaveOutfit = async () => {
   try {
     const body = {
-      name: form.name,
-      category: form.category,
+      name: form.name.toUpperCase(),
+      category: form.category.toLowerCase(),
       items: props.items
     };
     const response = await fetch(outfitsServiceUrl, {
@@ -163,6 +163,7 @@ const close = () => {
 
 input {
 
+  font-family: "Bebas Neue", serif;
   border: 3px solid #000;
   border-radius: 5px;
   height: 50px;

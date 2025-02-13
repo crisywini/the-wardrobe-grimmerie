@@ -89,9 +89,27 @@ const errors = reactive({
 
 const file: Ref = ref(null);
 
-const onSaveItem = () => {
 
+const resetForm = () => {
+  Object.assign(form, {
+    name: '',
+    category: '',
+    brand: '',
+    color: '',
+    style: '',
+    season: ''
+  });
+  file.value = null;
+};
+
+const onSaveItem = () => {
   const formData = new FormData();
+  form.name = form.name.toUpperCase();
+  form.category = form.category.toLowerCase();
+  form.brand = form.brand.toUpperCase();
+  form.color = form.color.toUpperCase();
+  form.style = form.style.toUpperCase();
+  form.season = form.season.toUpperCase();
 
   formData.append('file', file.value);
   formData.append('item', JSON.stringify(form));
@@ -101,7 +119,11 @@ const onSaveItem = () => {
   fetch(itemServiceUrl, {
     method: 'POST',
     body: formData
-  }).catch(error => console.error(error));
+  })
+    .then(() => {
+      resetForm();
+    })
+    .catch(error => console.error(error));
 }
 
 
@@ -142,6 +164,7 @@ watch(
 
 
 const validateField = (field: string, value: string) => {
+
   switch (field) {
 
 
