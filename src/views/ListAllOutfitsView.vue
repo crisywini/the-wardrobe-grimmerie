@@ -4,6 +4,7 @@
     <div class="box" />
 
     <div class="category-container">
+      <h1 class="category" @click="selectAll">All</h1>
       <h1 v-for="category in outfitCategoriesRef" :key="category" class="category" @click="selectCategory(category)">
         {{
           category
@@ -21,9 +22,6 @@
 import { API_URLS } from '@/constants/constants';
 import type Outfit from '@/interfaces/outfit';
 import { onMounted, ref } from 'vue';
-
-
-//const images = ["/public/images/o1.png", "/public/images/o2.png", "/public/images/o3.png", "/public/images/o4.png"]
 
 const outfitImages = ref();
 
@@ -100,9 +98,13 @@ const selectOutfit = (path: string) => {
 };
 
 const selectCategory = async (category: string) => {
-  console.log('Category Selected', category)
   outfitsRef.value = await getOutfitsByCategory(category);
-  console.log(outfitsRef.value);
+  outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
+};
+
+const selectAll = async () => {
+  outfitsRef.value = await getAllOutfits();
+  outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
 };
 
 onMounted(fetchAllItems);
