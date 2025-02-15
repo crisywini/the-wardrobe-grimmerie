@@ -21,6 +21,7 @@
   width: 100%;
   font-family: "Bebas Neue", serif;
   font-style: normal;
-  height: 30px;
+  font-size: xx-large;
+  height: 50px;
 }
 </style>
