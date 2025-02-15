@@ -28,11 +28,11 @@ const navigateTo = (link: string | RouteLocationAsRelativeGeneric | RouteLocatio
 <style scoped>
 .menu {
   display: flex;
-  align-items: center;
+  align-items: first baseline;
   justify-items: center;
-  padding: 70px 0 0 0;
+  padding: 50px 0 0 0;
   margin: 0;
-  gap: 60px;
+  gap: 10px;
   min-height: 100vh;
   font-family: "Bebas Neue", serif;
   font-style: normal;
@@ -49,14 +49,29 @@ const navigateTo = (link: string | RouteLocationAsRelativeGeneric | RouteLocatio
   justify-content: center;
   align-items: center;
   background: #fff;
+  color: white;
+  font-size: xx-large;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  height: 150px;
-  width: 150px;
+  height: 50vw;
+  width: 30vw;
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  padding: 60px;
+}
+
+.menu-item:nth-child(1) {
+  background-image: url('/public/images/wardrobe-grimmerie.jpg');
+  background-size: cover;
+}
+
+.menu-item:nth-child(2) {
+  background-image: url('/public/images/see-all.jpg');
+  background-size: contain;
+}
+
+.menu-item:nth-child(3) {
+  background-image: url('/public/images/add-items.jpg');
+  background-size: cover;
 }
 
 .menu-item:hover {
