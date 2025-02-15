@@ -63,15 +63,15 @@ const nextImage = () => {
   grid-template-columns: repeat(3, 1fr);
   text-align: center;
   gap: 0px;
-  padding: 30px 10px;
-  width: 700px;
+  padding: 5px 40px;
+  width: 900px;
   place-items: center;
 }
 
 
 .image-container img {
   object-fit: contain;
-  width: 100%;
+  width: 140%;
   height: 100%;
 }
 </style>

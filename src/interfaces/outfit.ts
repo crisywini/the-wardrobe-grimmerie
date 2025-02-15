@@ -5,4 +5,5 @@ export default interface Outfit {
   name: string;
   category: string;
   items: Item[];
+  default_image_url: string;
 }

@@ -4,6 +4,7 @@
     <div class="box" />
 
     <div class="category-container">
+      <h1 class="category" @click="selectAll">All</h1>
       <h1 v-for="category in outfitCategoriesRef" :key="category" class="category" @click="selectCategory(category)">
         {{
           category
@@ -11,7 +12,7 @@
     </div>
 
     <div class="outfits-container">
-      <img v-for="path in images" :key="path" :src="path" class="outfit" @click="selectOutfit(path)">
+      <img v-for="path in outfitImages" :key="path" :src="path" class="outfit" @click="selectOutfit(path)">
     </div>
 
   </div>
@@ -22,12 +23,11 @@ import { API_URLS } from '@/constants/constants';
 import type Outfit from '@/interfaces/outfit';
 import { onMounted, ref } from 'vue';
 
-
-const images = ["/public/images/o1.png", "/public/images/o2.png", "/public/images/o3.png", "/public/images/o4.png"]
-
+const outfitImages = ref();
 
 const outfitCategoriesServiceUrl = API_URLS.OUTFITS_CATEGORIES_SERVICE_URL;
 const ouftitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
+const imageBaseUrl = API_URLS.BASE_API_URL;
 
 const outfitCategoriesRef = ref([]);
 const outfitsRef = ref<Outfit[]>();
@@ -36,6 +36,7 @@ const fetchAllItems = async () => {
   try {
     outfitCategoriesRef.value = await getOutfitCategories();
     outfitsRef.value = await getAllOutfits();
+    outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
   } catch (error) {
     console.log('Error getting categories: ', error);
   }
@@ -97,9 +98,13 @@ const selectOutfit = (path: string) => {
 };
 
 const selectCategory = async (category: string) => {
-  console.log('Category Selected', category)
   outfitsRef.value = await getOutfitsByCategory(category);
-  console.log(outfitsRef.value);
+  outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
+};
+
+const selectAll = async () => {
+  outfitsRef.value = await getAllOutfits();
+  outfitImages.value = outfitsRef.value?.map(outfit => imageBaseUrl + outfit.default_image_url);
 };
 
 onMounted(fetchAllItems);

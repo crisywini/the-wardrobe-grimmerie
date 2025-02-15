@@ -53,8 +53,8 @@ const outfitsServiceUrl = API_URLS.OUTFITS_SERVICE_URL;
 const onSaveOutfit = async () => {
   try {
     const body = {
-      name: form.name,
-      category: form.category,
+      name: form.name.toUpperCase(),
+      category: form.category.toLowerCase(),
       items: props.items
     };
     const response = await fetch(outfitsServiceUrl, {
@@ -118,18 +118,12 @@ const close = () => {
 <style>
 .pop-up {
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
   padding: 32px 16px 120px;
-  height: 120vh;
-  width: 100%;
+  height: 100vh;
+  min-width: 100vh;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: grid;
   place-items: center;
-
-
 
 }
 
@@ -169,6 +163,7 @@ const close = () => {
 
 input {
 
+  font-family: "Bebas Neue", serif;
   border: 3px solid #000;
   border-radius: 5px;
   height: 50px;
