@@ -1,13 +1,20 @@
 <template>
 
   <header class="header">
-    Oh My Look!
+    <h1 class="menu" @click="onMenu"> My Look!</h1>
   </header>
 
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
+
+const onMenu = () => {
+  router.push("/");
+}
 
 </script>
 
@@ -23,5 +30,11 @@
   font-style: normal;
   font-size: xx-large;
   height: 50px;
+}
+
+.menu {
+  cursor: pointer;
+  text-justify: auto;
+  font-size: xx-large;
 }
 </style>
