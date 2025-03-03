@@ -13,8 +13,6 @@ Related to #456
 
 <!-- Why is this change required? What problem does it solve? -->
 
-This change helps to [explain why this feature is needed or how it improves the app].
-
 ## ✅ Checklist
 
 - [ ] Added/updated tests as needed 🧪
