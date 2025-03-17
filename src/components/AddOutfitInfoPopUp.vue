@@ -54,7 +54,7 @@ const onSaveOutfit = async () => {
   try {
     const body = {
       name: form.name.toUpperCase(),
-      category: form.category.toLowerCase(),
+      category: form.category.toLowerCase().trim(),
       items: props.items
     };
     const response = await fetch(outfitsServiceUrl, {
