@@ -3,7 +3,8 @@
     <button class="button-56" @click="previousImage">&#60;</button>
 
     <div class="image-container" :style="containerStyle">
-      <img v-if="items[currentIndex]" :src="imageBaseUrl + items[currentIndex].image_url" alt="Image" />
+      <img v-if="items[currentIndex]" :src="imageBaseUrl + items[currentIndex].image_url" alt="Image"
+        style="max-width: 100%; max-height: 100%; object-fit: contain;" />
     </div>
 
     <button class="button-56" @click="nextImage">&#62;</button>
