@@ -59,3 +59,6 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+
+Some of the Vue 3 features here are not available yet for this specific project
